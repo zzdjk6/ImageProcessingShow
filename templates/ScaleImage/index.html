@@ -1,0 +1,35 @@
+{% extends 'base.html'%}
+
+{% block title %}
+图像缩放
+{% endblock %}
+
+{% block content %}
+<div>
+	{% load static %}
+	<img src="{% static "stuff/lena.jpg" %}" />
+	<img id="scaled_image"/>
+</div>
+<div style="margin-top:20px">
+	<script type="text/javascript">
+		function load_scaled_image(url, tag_id) {
+			url += '?method=' + $("#scale_method").val() + '&times=' + $("#scale_times").val();
+			//alert(url);
+			load_image(url, tag_id);
+			// $.get(url,function(data){
+			// alert(data);
+			// });
+		}
+	</script>
+	<input id="scale_times" type="text" style="width:30px" value="1.2"/>
+	<select id="scale_method">
+		<option value="1">线性插值</option>
+		<option value="2">双线性插值</option>
+	</select>
+	<button id="invert_color_button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
+	style="font-size:14px"
+	onclick="load_scaled_image('{% url ScaleImage.views.get_scaled_image %}','scaled_image')">
+		单击显示缩放图像
+	</button>
+</div>
+{% endblock %}

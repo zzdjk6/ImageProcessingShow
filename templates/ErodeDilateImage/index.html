@@ -1,0 +1,59 @@
+{% extends 'base.html'%}
+
+{% block title %}
+图像的腐蚀、膨胀、开、闭运算
+{% endblock %}
+
+{% block content %}
+<div>
+	{% load static %}
+	<img src="{% static "stuff/lena_binary_raw.jpg" %}" />
+	<img id="dealed_image"/>
+</div>
+<div style="margin-top:20px">
+	<script type="text/javascript">
+		function load_dealed_image(url, tag_id) {
+			template = ''
+			for(i=1;i<=9;i++){
+				template += $("#template"+i).val();
+				if (i != 9){
+					template += ',';
+				}
+			}
+			url += '?method=' + $("#dealed_method").val() + '&template=' + template;
+			//alert(url);
+			load_image(url, tag_id);
+		}
+	</script>
+	
+	<table>
+		<tr>
+			<td><input id="template1" type="text" style="width:30px" value="1"/></td>
+			<td><input id="template2" type="text" style="width:30px" value="1"/></td>
+			<td><input id="template3" type="text" style="width:30px" value="1"/></td>
+		</tr>                                                        
+		<tr>                                                         
+			<td><input id="template4" type="text" style="width:30px" value="1"/></td>
+			<td><input id="template5" type="text" style="width:30px" value="1"/></td>
+			<td><input id="template6" type="text" style="width:30px" value="1"/></td>
+		</tr>                                                        
+		<tr>                                                         
+			<td><input id="template7" type="text" style="width:30px" value="1"/></td>
+			<td><input id="template8" type="text" style="width:30px" value="1"/></td>
+			<td><input id="template9" type="text" style="width:30px" value="1"/></td>
+		</tr>
+	</table>
+	
+	<select id="dealed_method">
+		<option value="1">腐蚀</option>
+		<option value="2">膨胀</option>
+		<option value="3">开运算</option>
+		<option value="4">闭运算</option>
+	</select>
+	<button id="invert_color_button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
+	style="font-size:14px"
+	onclick="load_dealed_image('{% url ErodeDilateImage.views.get_dealed_image %}','dealed_image')">
+		单击显示处理后图像
+	</button>
+</div>
+{% endblock %}

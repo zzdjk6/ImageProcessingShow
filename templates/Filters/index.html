@@ -1,0 +1,87 @@
+{% extends 'base.html'%}
+
+{% block title %}
+滤波器
+{% endblock %}
+
+{% block content %}
+<div>
+    {% load static %}
+    <img id="raw_image" src="{% static "stuff/lena_noise.jpg" %}"/>
+    <img id="dealed_image" src="{% static "stuff/lena_black.jpg" %}"/>
+</div>
+<div style="margin-top:20px">
+    <script type="text/javascript">
+        
+        function load_dealed_image() {
+        	url = '{% url Filters.views.get_dealed_image %}';
+        	method = $("[name=method]:checked").val();
+            url += '?method=' + method;
+            if(Number(method) == 5){
+            	template = ''
+	            for(i=1;i<=9;i++){
+	                template += $("#template"+i).val();
+	                if (i != 9){
+	                    template += ',';
+	                }
+	            }
+            	url += '&template=' + template;
+            }
+            $("#dealed_image").attr('src',url);
+        }
+        
+        function change_interface(){
+        	//$("#dealed_image").attr('src','{% static "stuff/lena_black.jpg" %}');
+        	method = Number($("[name=method]:checked").val());
+        	if(method < 3){
+        		$("#raw_image").attr('src','{% static "stuff/lena_noise.jpg" %}');
+        	}
+        	else{
+        		$("#raw_image").attr('src','{% static "stuff/lena_grey.jpg" %}');
+        	}
+        	
+        	if(method == 5){
+        		$("#templates").show();
+        	}
+        	else{
+        		$("#templates").hide();
+        	}
+        }
+
+    </script>
+    
+    <div>
+    	<input id="method1" type="radio" name="method" value="1" checked="checked" onchange="change_interface();"/><label for="method1">均值滤波器</label>
+    	<input id="method2" type="radio" name="method" value="2" onchange="change_interface();"/><label for="method2">中值滤波器</label>
+    	<input id="method3" type="radio" name="method" value="3" onchange="change_interface();"/><label for="method3">Roberts滤波器</label>
+    	<input id="method4" type="radio" name="method" value="4" onchange="change_interface();"/><label for="method4">Sobel滤波器</label>
+    	<input id="method5" type="radio" name="method" value="5" onchange="change_interface();"/><label for="method5">Laplacian滤波器</label>
+    </div>
+    
+    <div id="templates" style="display: none">
+    	<table>
+        <tr>
+            <td><input id="template1" type="text" style="width:30px" value="0"/></td>
+            <td><input id="template2" type="text" style="width:30px" value="1"/></td>
+            <td><input id="template3" type="text" style="width:30px" value="0"/></td>
+        </tr>                                                        
+        <tr>                                                         
+            <td><input id="template4" type="text" style="width:30px" value="1"/></td>
+            <td><input id="template5" type="text" style="width:30px" value="-4"/></td>
+            <td><input id="template6" type="text" style="width:30px" value="1"/></td>
+        </tr>                                                        
+        <tr>                                                         
+            <td><input id="template7" type="text" style="width:30px" value="0"/></td>
+            <td><input id="template8" type="text" style="width:30px" value="1"/></td>
+            <td><input id="template9" type="text" style="width:30px" value="0"/></td>
+        </tr>
+    </table>
+    </div>
+    
+    <button id="deal_button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
+    style="font-size:14px"
+    onclick="load_dealed_image();">
+        单击显示处理后图像
+    </button>
+</div>
+{% endblock %}

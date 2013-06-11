@@ -1,0 +1,8 @@
+{% for operation in operation_list %}
+<div>
+	<button class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
+	style="width:150px">
+		<a href="{{ operation.url }}"><span style="font-size:14px">{{ operation.name }}</span></a>
+	</button>
+</div>
+{% endfor %}

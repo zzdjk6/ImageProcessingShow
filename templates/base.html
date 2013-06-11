@@ -1,0 +1,81 @@
+<html>
+	<head>
+		<title> {% block title%}
+			图像处理课程实验展示
+			{% endblock %} </title>
+		{% load static %}
+		<link type="text/css" rel="stylesheet" href="{% static "ui/jquery-ui-1.8.20.custom/css/dot-luv/jquery-ui-1.8.20.custom.css"%}" />
+		<script type="text/javascript" src="{% static "ui/jquery-ui-1.8.20.custom/js/jquery-1.7.2.min.js"%}"></script>
+		<script type="text/javascript" src="{% static "ui/jquery-ui-1.8.20.custom/js/jquery-ui-1.8.20.custom.min.js"%}"></script>
+		<style>
+			body {
+				background-color: #000000;
+				color: #cccccc
+			}
+		</style>
+		<script type="text/javascript">
+			$(function() {
+				$("#attachments_tab").tabs();
+				$("#side_panel").load('{% url ImageProcessingShow.views.get_operations %}');
+			});
+			
+			function load_image(url,tag_id)
+			{
+				var img = $("<img />").attr({'src': url, 'id': tag_id}).load(function() {
+				if (!this.complete || typeof this.naturalWidth == "undefined" || this.naturalWidth == 0) {
+				} else {
+					$('#'+tag_id).replaceWith(img);
+				}
+				});
+			}
+		</script>
+	</head>
+	<body>
+
+		<div id="top_bar" class="ui-progressbar ui-widget ui-widget-content"
+		style="display: block;width:100%;height:30px;text-align: center">
+			数字图像处理课程实验展示(by 陈圣晗)
+		</div>
+
+		<div id="side_panel" style="float:left;position: fixed;margin-top:150px">
+		</div>
+
+		<div align="center" style="margin-top:100px">
+			{% block content %}
+			Hello~This is base.html!
+			{% endblock %}
+
+			<div align="center" id="attachments_tab" style="width:800px;margin-top: 50px">
+				<ul>
+					<li>
+						<a href="#explains_block">说明</a>
+					</li>
+					<li>
+						<a href="#codes_block">代码</a>
+					</li>
+					<li>
+						<a href="#comments_block">评论</a>
+					</li>
+				</ul>
+				
+				<div id="explains_block" style="text-align: left">
+					{% block explains %}
+					{{ attachments.explain }}
+					{% endblock %}
+				</div>
+
+				<div id="codes_block" style="text-align: left">
+					{% block codes %}
+					{{ codes|safe }}
+					{% endblock %}
+				</div>
+
+				<div id="comments_block" style="text-align: left">
+					{% block comments %}
+					{% endblock %}
+				</div>
+			</div>
+		</div>
+
+	</body>
+</html>

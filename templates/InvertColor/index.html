@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}
+图像反色
+{% endblock %}
+
+{% block content %}
+<div>
+	{% load static %}
+	<img src="{% static "stuff/lena.jpg" %}" />
+	<img id="inverted_image"/>
+</div>
+<div style="margin-top:20px">
+	<script type="text/javascript">
+		function load_inverted_image(url, tag_id) {
+			load_image(url, tag_id);
+			$("#invert_color_button").remove();
+		}
+	</script>
+	<button id="invert_color_button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
+	style="font-size:14px"
+	onclick="load_inverted_image('{% url InvertColor.views.get_inverted_image %}','inverted_image')">
+		单击显示反色图像
+	</button>
+</div>
+{% endblock %}
+
+{% block comments %}
+<div>
+	图像反色的评论
+</div>
+{% endblock %}

@@ -1,0 +1,64 @@
+{% extends 'base.html'%}
+
+{% block title %}
+区域生长
+{% endblock %}
+
+{% block content %}
+<div>
+    {% load static %}
+    <img src="{% static "stuff/Regiongrowing_figure_Original.jpg" %}" onclick="image_click();"/>
+    <img id="dealed_image"/>
+</div>
+<div style="margin-top:20px">
+    <script type="text/javascript">
+    
+        var xs = new Array();
+        var ys = new Array();
+        
+		function load_dealed_image() {
+			length = xs.length;
+			threshold = $("#threshold").val();
+			url = '{% url RegionGrow.views.get_dealed_image %}' + '?length='+length;
+			url += '&threshold='+threshold;
+			for(i=0;i<length;i++){
+				url += '&x'+i+'='+xs[i];
+				url += '&y'+i+'='+ys[i];
+			}
+            $("#dealed_image").attr('src',url);
+		}
+
+			
+
+		function image_click() {
+			x = window.event.offsetX;
+			y = window.event.offsetY;
+			xs.push(x);
+			ys.push(y);
+			update_click_info();
+		}
+
+		function update_click_info() {
+			length = xs.length;
+			info_string = '';
+			for ( i = 0; i < length; i++) {
+				info_string += '种子点' + i + ':' + xs[i] + ',' + ys[i] + "<br/>";
+			}
+			$("#click_info").html(info_string);
+		}
+
+    </script>
+    <div>
+	    <div id="click_info" style="width:120px;text-align: left">
+	    	
+	    </div>
+    </div>
+    
+    阈值<input id="threshold" type="text" value="50" style="width:50px"/>
+    <button id="deal_button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
+    style="font-size:14px"
+    onclick="load_dealed_image();">
+        单击显示处理后图像
+    </button>
+</div>
+{% endblock %}

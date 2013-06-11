@@ -1,0 +1,6 @@
+SetHandler python-program
+PythonHandler django.core.handlers.modpython
+SetEnv DJANGO_SETTINGS_MODULE ImageProcessingShow.settings
+PythonOption django.root /ImageProcessingShow
+PythonPath "['/home/u116897/'] + ['/home/u116897/ImageProcessingShow/'] + ['/home/u116897/django'] + sys.path"
+PythonDebug On 

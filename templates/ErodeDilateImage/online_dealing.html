@@ -1,0 +1,110 @@
+{% extends 'base.html'%}
+
+{% block title %}
+图像的腐蚀、膨胀、开、闭运算
+{% endblock %}
+
+{% block content %}
+<div>
+	{% load static %}
+	<img src="{% static "stuff/lena.jpg" %}" />
+	<img id="dealed_image"/>
+</div>
+<div style="margin-top:20px">
+	<script type="text/javascript">
+		Filters = {};
+		Filters.getPixels = function(img) {
+			var c = this.getCanvas(img.width, img.height);
+			var ctx = c.getContext('2d');
+			ctx.drawImage(img);
+			return ctx.getImageData(0, 0, c.width, c.height);
+		};
+
+		Filters.getCanvas = function(w, h) {
+			var c = document.createElement('canvas');
+			c.width = w;
+			c.height = h;
+			return c;
+		};
+
+		Filters.filterImage = function(filter, image, var_args) {
+			var args = [this.getPixels(image)];
+			for (var i = 2; i < arguments.length; i++) {
+				args.push(arguments[i]);
+			}
+			return filter.apply(null, args);
+		};
+
+		Filters.grayscale = function(pixels, args) {
+			var d = pixels.data;
+			for (var i = 0; i < d.length; i += 4) {
+				var r = d[i];
+				var g = d[i + 1];
+				var b = d[i + 2];
+				// CIE luminance for the RGB
+				// The human eye is bad at seeing red and blue, so we de-emphasize them.
+				var v = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+				d[i] = d[i + 1] = d[i + 2] = v
+			}
+			return pixels;
+		};
+
+		function load_dealed_image() {
+			method = $("#dealed_method").val();
+			template = new Array();
+			for ( i = 1; i <= 9; i++) {
+				template[i] = $("#template" + i).val();
+			}
+			alert(template);
+		}
+	</script>
+
+	<table>
+		<tr>
+			<td>
+			<input id="template1" type="text" style="width:30px" value="1"/>
+			</td>
+			<td>
+			<input id="template2" type="text" style="width:30px" value="1"/>
+			</td>
+			<td>
+			<input id="template3" type="text" style="width:30px" value="1"/>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<input id="template4" type="text" style="width:30px" value="1"/>
+			</td>
+			<td>
+			<input id="template5" type="text" style="width:30px" value="1"/>
+			</td>
+			<td>
+			<input id="template6" type="text" style="width:30px" value="1"/>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<input id="template7" type="text" style="width:30px" value="1"/>
+			</td>
+			<td>
+			<input id="template8" type="text" style="width:30px" value="1"/>
+			</td>
+			<td>
+			<input id="template9" type="text" style="width:30px" value="1"/>
+			</td>
+		</tr>
+	</table>
+
+	<select id="dealed_method">
+		<option value="1">腐蚀</option>
+		<option value="2">膨胀</option>
+		<option value="3">开运算</option>
+		<option value="4">闭运算</option>
+	</select>
+	<button id="deal_button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
+	style="font-size:14px"
+	onclick="grayscale()">
+		单击显示处理后图像
+	</button>
+</div>
+{% endblock %}

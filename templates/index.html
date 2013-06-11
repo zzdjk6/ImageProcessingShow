@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block title%}
+图像处理课程实验展示
+{% endblock %}
+
+{% block content %}
+<div>
+	{% load static %}
+	<img src="{% static "stuff/lena.jpg" %}" />
+</div>
+{% endblock %}
